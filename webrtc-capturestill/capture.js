@@ -25,34 +25,11 @@
     photo = document.getElementById('photo');
     startbutton = document.getElementById('startbutton');
 
-<<<<<<< HEAD
     
     navigator.mediaDevices.getUserMedia({video: true,audio: false})
     .then(function(stream) {
-        try{
-=======
-    navigator.getMedia = (navigator.mediaDevices.getUserMedia || navigator.getUserMedia ||
-                           navigator.webkitGetUserMedia ||
-                           navigator.mozGetUserMedia ||
-                           navigator.msGetUserMedia);
-
-    navigator.getMedia(
-      {
-        video: true,
-        audio: false
-      },
-      function(stream) {
-        if (navigator.mozGetUserMedia) {
-          video.mozSrcObject = stream;
-        } else {
->>>>>>> 7d8d8afd15beecb125ba0b1092fca8c9ff63f47e
-          var vendorURL = window.URL || window.webkitURL;
-          video.src = vendorURL.createObjectURL(stream);
-          video.play();
-        }catch(e){
           video.srcObject =  stream;
-          video.play();
-        }
+          video.play();  
       })
     .catch(function(err) {
         console.log("An error occured! " + err);
