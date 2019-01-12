@@ -25,29 +25,21 @@
     photo = document.getElementById('photo');
     startbutton = document.getElementById('startbutton');
 
-    navigator.getMedia = ( navigator.getUserMedia ||
-                           navigator.webkitGetUserMedia ||
-                           navigator.mozGetUserMedia ||
-                           navigator.msGetUserMedia);
-
-    navigator.getMedia(
-      {
-        video: true,
-        audio: false
-      },
-      function(stream) {
-        if (navigator.mozGetUserMedia) {
-          video.mozSrcObject = stream;
-        } else {
+    
+    navigator.mediaDevices.getUserMedia({video: true,audio: false})
+    .then(function(stream) {
+        try{
           var vendorURL = window.URL || window.webkitURL;
           video.src = vendorURL.createObjectURL(stream);
+          video.play();
+        }catch(e){
+          video.srcObject =  stream;
+          video.play();
         }
-        video.play();
-      },
-      function(err) {
+      })
+    .catch(function(err) {
         console.log("An error occured! " + err);
-      }
-    );
+      });
 
     video.addEventListener('canplay', function(ev){
       if (!streaming) {
@@ -70,7 +62,6 @@
 
     startbutton.addEventListener('click', function(ev){
       takepicture();
-      ev.preventDefault();
     }, false);
     
     clearphoto();
@@ -85,7 +76,7 @@
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     var data = canvas.toDataURL('image/png');
-    photo.setAttribute('src', data);
+    photo.src = data;
   }
   
   // Capture a photo by fetching the current contents of the video
@@ -102,7 +93,7 @@
       context.drawImage(video, 0, 0, width, height);
     
       var data = canvas.toDataURL('image/png');
-      photo.setAttribute('src', data);
+      photo.src = data;
     } else {
       clearphoto();
     }
