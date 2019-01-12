@@ -29,7 +29,11 @@
     navigator.mediaDevices.getUserMedia({video: true,audio: false})
     .then(function(stream) {
           video.srcObject =  stream;
+<<<<<<< HEAD
           video.play();  
+=======
+          video.play();   
+>>>>>>> 055ad7a0f6f7ece6d49e2ae0e4fcbfbc5074fb4a
       })
     .catch(function(err) {
         console.log("An error occured! " + err);
