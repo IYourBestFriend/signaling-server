@@ -1,12 +1,3 @@
-//#!/usr/bin/env node
-
-//
-// WebSocket chat server
-// Implemented using Node.js
-//
-// Requires the websocket module.
-//
-
 "use strict";
 
 var http = require('http');
