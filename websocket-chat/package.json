@@ -4,5 +4,8 @@
   "description": "A simple WebSocket-based chat server.",
   "dependencies": {
     "websocket": "*"
+  },
+  "scripts": {
+    "dev" : "browser-sync start --directory -s"
   }
 }
