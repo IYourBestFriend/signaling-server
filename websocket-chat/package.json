@@ -6,6 +6,10 @@
     "websocket": "*"
   },
   "scripts": {
-    "dev" : "browser-sync start --directory -s"
+    "watch": "nodemon ./chatserver.js --ignore node_modules/ --ignore index.html --ignore chatclient.js",
+    "dev": "browser-sync start --server --files '**/*.css, **/*.html, **/*.js'  --port 7777"
+  },
+  "devDependencies": {
+    "nodemon": "1.18.9"
   }
 }

@@ -157,8 +157,12 @@ wsServer.on('connect', function(connection) {
             var msgString = JSON.stringify(msg);
             var i;
 
-            for (i=0; i<connectionArray.length; i++) {
-              connectionArray[i].sendUTF(msgString);
+            if (msg.target && msg.target !== undefined && msg.target.length !== 0) {
+              sendToOneUser(msg.target, msgString);
+            } else {
+              for (i=0; i<connectionArray.length; i++) {
+                connectionArray[i].send(msgString);
+              }
             }
           }
       }
@@ -175,3 +179,15 @@ wsServer.on('connect', function(connection) {
     console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
   });
 });
+
+function sendToOneUser(target, msgString) {
+  var isUnique = true;
+  var i;
+
+  for (i=0; i<connectionArray.length; i++) {
+    if (connectionArray[i].username === target) {
+      connectionArray[i].send(msgString);
+      break;
+    }
+  }
+}

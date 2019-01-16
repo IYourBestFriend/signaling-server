@@ -81,3 +81,72 @@ function handleKey(evt) {
     }
   }
 }
+
+function sendToServer(msg) {
+  var msgJSON = JSON.stringify(msg);
+
+  connection.send(msgJSON);
+}
+
+function handleUserlistMsg(msg) {
+  var i;
+  var listElem = document.querySelector(".userlistbox");
+
+  while (listElem.firstChild) {
+    listElem.removeChild(listElem.firstChild);
+  }
+
+  msg.users.forEach(function(username) {
+    var item = document.createElement("li");
+    item.appendChild(document.createTextNode(username));
+    item.addEventListener("click", invite, false);
+
+    listElem.appendChild(item);
+  });
+}
+
+const mediaConstraints = {
+  audio: true, // We want an audio track
+  video: true // ...and we want a video track
+};
+
+function invite(evt) {
+  if (myPeerConnection) {
+    alert("You can't start a call because you already have one open!");
+  } else {
+    var clickedUsername = evt.target.textContent;
+
+    if (clickedUsername === myUsername) {
+      alert("I'm afraid I can't let you talk to yourself. That would be weird.");
+      return;
+    }
+
+    targetUsername = clickedUsername;
+    createPeerConnection();
+
+    navigator.mediaDevices.getUserMedia(mediaConstraints)
+    .then(function(localStream) {
+      document.getElementById("local_video").srcObject = localStream;
+      localStream.getTracks().forEach(track => myPeerConnection.addTrack(track, localStream));
+    })
+    .catch(handleGetUserMediaError);
+  }
+}
+
+function handleGetUserMediaError(e) {
+  switch(e.name) {
+    case "NotFoundError":
+      alert("Unable to open your call because no camera and/or microphone" +
+            "were found.");
+      break;
+    case "SecurityError":
+    case "PermissionDeniedError":
+      // Do nothing; this is the same as the user canceling the call.
+      break;
+    default:
+      alert("Error opening your camera and/or microphone: " + e.message);
+      break;
+  }
+
+  closeVideoCall();
+}
