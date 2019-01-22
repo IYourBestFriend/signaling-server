@@ -1,11 +1,15 @@
 "use strict";
 let connection = null;
 let clientID = 0;
-let myPeerConnection;
+let myPeerConnection =  null;
+let myUsername = null;
+let targetUsername = null;  
+
 
 function setUsername() {
+  myUsername = document.getElementById("name").value;
   var msg = {
-    name: document.getElementById("name").value,
+    name: myUsername,
     date: Date.now(),
     id: clientID,
     type: "username"
@@ -177,7 +181,6 @@ function createPeerConnection() {
         {url:'stun:stun3.l.google.com:19302'},
         {url:'stun:stun4.l.google.com:19302'},
         {url:'stun:stun.fwdnet.net'},
-        {url:'stun.telbo.com:3478'},
         {url:'stun:stun.ideasip.com'},
         {url:'stun:stun.iptel.org'},
         {url:'stun:stun.rixtelecom.se'},
@@ -387,4 +390,8 @@ function handleHangUpMsg(msg) {
   log("*** Received hang up notification from other peer");
 
   closeVideoCall();
+}
+
+function reportError(errMessage) {
+  log_error("Error " + errMessage.name + ": " + errMessage.message);
 }
