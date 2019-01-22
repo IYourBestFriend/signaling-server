@@ -398,13 +398,13 @@ function handleUserlistMsg(msg) {
 
   // Add member names from the received list
 
-  for (i=0; i < msg.users.length; i++) {
+  msg.users.forEach(function(username) {
     var item = document.createElement("li");
-    item.appendChild(document.createTextNode(msg.users[i]));
+    item.appendChild(document.createTextNode(username));
     item.addEventListener("click", invite, false);
 
     listElem.appendChild(item);
-  }
+  });
 }
 
 // Close the RTCPeerConnection and reset variables so that the user can
