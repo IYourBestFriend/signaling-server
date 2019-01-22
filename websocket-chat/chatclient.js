@@ -4,7 +4,7 @@ let clientID = 0;
 let myPeerConnection =  null;
 let myUsername = null;
 let targetUsername = null;  
-
+let negotiating = false;
 
 function setUsername() {
   myUsername = document.getElementById("name").value;
@@ -227,7 +227,15 @@ function createPeerConnection() {
   myPeerConnection.onicegatheringstatechange = handleICEGatheringStateChangeEvent;
   myPeerConnection.onsignalingstatechange = handleSignalingStateChangeEvent;
 }
-function handleNegotiationNeededEvent() {
+async function handleNegotiationNeededEvent() {
+  try {
+    if (negotiating || myPeerConnection.signalingState != "stable") return;
+    negotiating = true;
+    /* Your async/await-using code goes here */
+  } finally {
+    negotiating = false;
+  }
+  if (myPeerConnection.signalingState != "stable") return;
   myPeerConnection.createOffer().then(function(offer) {
     return myPeerConnection.setLocalDescription(offer);
   })
@@ -394,4 +402,16 @@ function handleHangUpMsg(msg) {
 
 function reportError(errMessage) {
   log_error("Error " + errMessage.name + ": " + errMessage.message);
+}
+
+function log_error(text) {
+  var time = new Date();
+
+  console.error("[" + time.toLocaleTimeString() + "] " + text);
+}
+
+function log(text) {
+  var time = new Date();
+
+  console.log("[" + time.toLocaleTimeString() + "] " + text);
 }
