@@ -5,11 +5,14 @@
   "dependencies": {
     "websocket": "*"
   },
+  "main": "index.js",
   "scripts": {
+    "start": "electron .",
     "watch": "nodemon ./chatserver.js --ignore node_modules/ --ignore index.html --ignore chatclient.js",
     "dev": "browser-sync start --server --files '**/*.css, **/*.html, **/*.js'  --port 7777"
   },
   "devDependencies": {
+    "electron": "4.0.6",
     "nodemon": "1.18.9"
   }
 }

@@ -1,8 +1,6 @@
 "use strict";
 
 var http = require('http');
-var url = require('url');
-var fs = require('fs');
 var WebSocketServer = require('websocket').server;
 
 var connectionArray = [];
