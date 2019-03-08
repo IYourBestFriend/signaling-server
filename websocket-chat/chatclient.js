@@ -210,13 +210,7 @@ function createPeerConnection() {
   myPeerConnection.onsignalingstatechange = handleSignalingStateChangeEvent;
 }
 async function handleNegotiationNeededEvent() {
-  try {
-    if (negotiating || myPeerConnection.signalingState != "stable") return;
-    negotiating = true;
-    /* Your async/await-using code goes here */
-  } finally {
-    negotiating = false;
-  }
+ 
   if (myPeerConnection.signalingState != "stable") return;
   myPeerConnection.createOffer().then(function(offer) {
     return myPeerConnection.setLocalDescription(offer);
