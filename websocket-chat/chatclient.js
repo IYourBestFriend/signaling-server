@@ -33,7 +33,7 @@ function connect() {
     var msg = JSON.parse(evt.data);
     var time = new Date(msg.date);
     var timeStr = time.toLocaleTimeString();
-
+    console.log(evt);
     switch(msg.type) {
       case "id":
         clientID = msg.id;
@@ -110,7 +110,6 @@ function sendToServer(msg) {
 }
 
 function handleUserlistMsg(msg) {
-  var i;
   var listElem = document.getElementById("userlistbox");
 
   while (listElem.firstChild) {
@@ -208,7 +207,6 @@ function createPeerConnection() {
   myPeerConnection.onnegotiationneeded = handleNegotiationNeededEvent;
   myPeerConnection.onremovetrack = handleRemoveTrackEvent;
   myPeerConnection.oniceconnectionstatechange = handleICEConnectionStateChangeEvent;
-  myPeerConnection.onicegatheringstatechange = handleICEGatheringStateChangeEvent;
   myPeerConnection.onsignalingstatechange = handleSignalingStateChangeEvent;
 }
 async function handleNegotiationNeededEvent() {
@@ -327,11 +325,9 @@ function closeVideoCall() {
   if (myPeerConnection) {
     myPeerConnection.ontrack = null;
     myPeerConnection.onremovetrack = null;
-    myPeerConnection.onremovestream = null;
     myPeerConnection.onnicecandidate = null;
     myPeerConnection.oniceconnectionstatechange = null;
     myPeerConnection.onsignalingstatechange = null;
-    myPeerConnection.onicegatheringstatechange = null;
     myPeerConnection.onnegotiationneeded = null;
 
     if (remoteVideo.srcObject) {
@@ -346,10 +342,8 @@ function closeVideoCall() {
     myPeerConnection = null;
   }
 
-  remoteVideo.removeAttribute("src");
   remoteVideo.removeAttribute("srcObject");
-  localVideo.removeAttribute("src");
-  remoteVideo.removeAttribute("srcObject");
+  localVideo.removeAttribute("srcObject");
 
   document.getElementById("hangup-button").disabled = true;
   targetUsername = null;
@@ -373,10 +367,6 @@ function handleSignalingStateChangeEvent(event) {
   }
 };
 
-function handleICEGatheringStateChangeEvent(event) {
-  // Our sample just logs information to console here,
-  // but you can do whatever you need.
-}
 
 function handleHangUpMsg(msg) {
   log("*** Received hang up notification from other peer");
