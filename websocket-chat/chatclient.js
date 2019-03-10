@@ -33,7 +33,6 @@ function connect() {
     var msg = JSON.parse(evt.data);
     var time = new Date(msg.date);
     var timeStr = time.toLocaleTimeString();
-    console.log(evt);
     switch(msg.type) {
       case "id":
         clientID = msg.id;
@@ -146,6 +145,7 @@ function invite(evt) {
 
     navigator.mediaDevices.getUserMedia(mediaConstraints)
     .then(function(localStream) {
+      console.log('function invite');
       document.getElementById("local_video").srcObject = localStream;
       localStream.getTracks().forEach(track => myPeerConnection.addTrack(track, localStream));
     })
@@ -211,20 +211,31 @@ function createPeerConnection() {
 }
 async function handleNegotiationNeededEvent() {
  
-  if (myPeerConnection.signalingState != "stable") return;
-  myPeerConnection.createOffer().then(function(offer) {
-    return myPeerConnection.setLocalDescription(offer);
-  })
-  .then(function() {
-    sendToServer({
-      name: myUsername,
-      target: targetUsername,
-      type: "video-offer",
-      sdp: myPeerConnection.localDescription
-    });
-  })
-  .catch(reportError);
+  try {
+      if (negotiating || myPeerConnection.signalingState != "stable") return;
+      log("*** Negotiation needed");
+      negotiating = true;
+
+      log("---> Creating offer");
+      const offer = await myPeerConnection.createOffer();
+
+      log("---> Creating new description object to send to remote peer");
+      await myPeerConnection.setLocalDescription(offer);
+
+      log("---> Sending offer to remote peer");
+      sendToServer({
+          name: myUsername,
+          target: targetUsername,
+          type: "video-offer",
+          sdp: myPeerConnection.localDescription
+      });
+  } catch (e) {
+      reportError(e)
+  } finally {
+      negotiating = false;
+  }
 }
+
 
 function handleVideoAnswerMsg(msg) {
   log("Call recipient has accepted our call");
