@@ -95,7 +95,7 @@ function send() {
 }
 
 function handleKey(evt) {
-  if (evt.keyCode === 13 || evt.keyCode === 14) {
+  if (evt.keyCode === 13) {
     if (!document.getElementById("send").disabled) {
       send();
     }
