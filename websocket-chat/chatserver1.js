@@ -3,12 +3,12 @@
 const WebSocket = require('ws');
 
 let connectionArray = [];
-let nextID = 0;
+let nextID = 1;
 let appendToMakeUnique = 1;
 
 
 const wss = new WebSocket.Server({port:6502},()=>{
-  console.log((new Date()) + " Server is listening on port 6502")
+  console.log(`${new Date().toLocaleString('ru')} Server is listening on port 6502`)
 });
 
 
@@ -17,7 +17,6 @@ function isUsernameUnique(name) {
 
   for (let i=0; i<length; i++) {
     if (connectionArray[i].username === name) return true;
-    console.log(connectionArray[i].username)
   }
   return false;
 }
@@ -62,7 +61,7 @@ function sendUserListToAll() {
 
 wss.on('connection', (ws)=> {
 
-  console.log((new Date()) + " connection accepted.");
+  console.log(`${new Date().toLocaleTimeString('ru')} connection accepted.`);
 
   connectionArray.push(ws);
 
@@ -96,7 +95,7 @@ wss.on('connection', (ws)=> {
               let nameChanged = false;
               let origName = msg.name;
 
-              while (isUsernameUnique(msg.name)) {
+              if (isUsernameUnique(msg.name)) {
                 msg.name = origName + appendToMakeUnique;
                 appendToMakeUnique++;
                 nameChanged = true;
@@ -138,7 +137,7 @@ wss.on('connection', (ws)=> {
       return (el.readyState === 1 );
     });
     sendUserListToAll();  // Update the user lists
-    console.log((new Date()) + `Peer disconnected.`);
+    console.log(`${new Date().toLocaleString('ru')} Peer disconnected.`);
   });
 });
 
