@@ -7,11 +7,7 @@ var connectionArray = [];
 var nextID = Date.now();
 var appendToMakeUnique = 1;
 
-var server = http.createServer(function(request, response) {
-    console.log((new Date()) + " Received request for " + request.url);
-    response.writeHead(404);
-    response.end();
-});
+var server = http.createServer();
 
 server.listen(6502, function() {
     console.log((new Date()) + " Server is listening on port 6502");
@@ -79,7 +75,7 @@ function sendUserListToAll() {
   var i;
 
   for (i=0; i<connectionArray.length; i++) {
-    connectionArray[i].sendUTF(userListMsgStr);
+    connectionArray[i].send(userListMsgStr);
   }
 }
 
@@ -103,7 +99,7 @@ wsServer.on('connect', function(connection) {
     type: "id",
     id: connection.clientID
   };
-  connection.sendUTF(JSON.stringify(msg));
+  connection.send(JSON.stringify(msg));
 
   // Handle the "message" event received over WebSocket. This
   // is a message sent by a client, and may be text to share with
@@ -140,7 +136,7 @@ wsServer.on('connect', function(connection) {
                   type: "rejectusername",
                   name: msg.name
                 };
-                connect.sendUTF(JSON.stringify(changeMsg));
+                connect.send(JSON.stringify(changeMsg));
               }
 
               connect.username = msg.name;

@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "A simple WebSocket-based chat server.",
   "dependencies": {
-    "websocket": "*"
+    "ws": "6.2.1"
   },
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "watch": "nodemon ./chatserver.js --ignore node_modules/ --ignore index.html --ignore chatclient.js",
+    "watch": "nodemon ./chatserver1.js --ignore node_modules/ --ignore index.html --ignore chatclient.js",
     "dev": "browser-sync start --server --files '**/*.css, **/*.html, **/*.js'  --port 7777"
   },
   "devDependencies": {
