@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A simple WebSocket-based chat server.",
   "dependencies": {
+    "redis": "2.8.0",
     "ws": "6.2.1"
   },
   "main": "index.js",

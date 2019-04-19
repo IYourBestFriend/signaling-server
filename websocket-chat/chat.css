@@ -44,7 +44,6 @@ li {
   width: 500px;
   height: 760px;
   display:block;
-  vertical-align:top;
   position:relative;
   overflow:auto;
 }
